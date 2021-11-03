@@ -35,4 +35,16 @@ public class PersonJdbcDao {
                 new int[] { Types.VARCHAR }, new BeanPropertyRowMapper<Person>(Person.class));
     }
 
+    public int deleteById(int id) {
+        return jdbcTemplate.update("delete from PERSON where id=?", new Object[] { id });
+    }
+
+    public int deleteByName(String name) {
+        return jdbcTemplate.update("delete from PERSON where name=?", new Object[] { name });
+    }
+
+    public Object deleteByLocation(String location) {
+        return jdbcTemplate.update("delete from PERSON where location=?", new Object[] { location });
+    }
+
 }
