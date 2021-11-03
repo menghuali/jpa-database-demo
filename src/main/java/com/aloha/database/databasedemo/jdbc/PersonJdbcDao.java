@@ -1,5 +1,7 @@
 package com.aloha.database.databasedemo.jdbc;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 
@@ -8,13 +10,30 @@ import com.aloha.database.databasedemo.entity.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Sample of Spring Data JDBC
+ */
 @Repository
 public class PersonJdbcDao {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    /**
+     * Sample of custom RowMapper
+     */
+    private class PersonRowMapper implements RowMapper<Person> {
+
+        @Override
+        public Person mapRow(ResultSet rs, int rowNumber) throws SQLException {
+            return Person.builder().id(rs.getInt("id")).name(rs.getString("name")).location(rs.getString("location"))
+                    .birthDate(rs.getTimestamp("birth_date")).build();
+        }
+
+    }
 
     public List<Person> findAll() {
         return jdbcTemplate.query("select * from PERSON", new BeanPropertyRowMapper<Person>(Person.class));
@@ -32,7 +51,7 @@ public class PersonJdbcDao {
 
     public List<Person> findByLocation(String location) {
         return jdbcTemplate.query("select * from PERSON where location=?", new Object[] { location },
-                new int[] { Types.VARCHAR }, new BeanPropertyRowMapper<Person>(Person.class));
+                new int[] { Types.VARCHAR }, new PersonRowMapper());
     }
 
     public int deleteById(int id) {
