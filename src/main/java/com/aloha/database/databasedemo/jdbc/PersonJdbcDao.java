@@ -47,4 +47,16 @@ public class PersonJdbcDao {
         return jdbcTemplate.update("delete from PERSON where location=?", new Object[] { location });
     }
 
+    public int insert(Person person) {
+        return jdbcTemplate.update("insert into person (id, name, location, birth_date) values(?, ?, ?, ?)",
+                new Object[] { person.getId(), person.getName(), person.getLocation(), person.getBirthDate() },
+                new int[] { Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP });
+    }
+
+    public int update(Person person) {
+        return jdbcTemplate.update("update person set name=?, location=?, birth_date=? where id=?;",
+                new Object[] { person.getName(), person.getLocation(), person.getBirthDate(), person.getId() },
+                new int[] { Types.VARCHAR, Types.VARCHAR, Types.TIMESTAMP, Types.INTEGER });
+    }
+
 }
