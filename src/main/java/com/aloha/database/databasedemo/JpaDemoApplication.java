@@ -3,7 +3,6 @@ package com.aloha.database.databasedemo;
 import java.util.Date;
 
 import com.aloha.database.databasedemo.entity.Person;
-import com.aloha.database.databasedemo.jdbc.PersonJdbcDao;
 import com.aloha.database.databasedemo.jpa.PersonJpaRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +24,21 @@ public class JpaDemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// log.info("FIND ALL: {}", personJdbcDao.findAll());
+		log.info("FIND ALL: {}", personJpaRepo.findAll());
 		log.info("FOUND BY ID: {}", personJpaRepo.findById(1001));
 		// log.info("FOUND BY NAME: {}", personJdbcDao.findByName("Mary"));
 		// log.info("FOUND BY LOCATION: {}", personJdbcDao.findByLocation("Toronto"));
 
 		// log.info("DELTE BY ID(1003): {}", personJdbcDao.deleteById(1003));
 		// log.info("DELTE BY NAME(Mary): {}", personJdbcDao.deleteByName("Mary"));
-		// log.info("DELTE BY LOCATION(Toronto): {}", personJdbcDao.deleteByLocation("Toronto"));
+		// log.info("DELTE BY LOCATION(Toronto): {}",
+		// personJdbcDao.deleteByLocation("Toronto"));
 
-		// log.info("INSERT(1100): {}", personJdbcDao
-		// 		.insert(Person.builder().id(1100).name("James").location("Winsor").birthDate(new Date()).build()));
+		log.info("UPDATE-1: {}",
+				personJpaRepo.update(Person.builder().name("James").location("Winsor").birthDate(new Date()).build()));
+		log.info("UPDATE-2: {}",
+				personJpaRepo.update(Person.builder().name("Jordan").location("Chicago").birthDate(new Date()).build()));
 
-		// log.info("UPDATE(1100): {}", personJdbcDao
-		// 		.update(Person.builder().id(1100).name("James").location("Chicago").birthDate(new Date()).build()));
+		log.info("DELTE(1001): {}", personJpaRepo.delete(1001));
 	}
 }
